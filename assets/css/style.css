@@ -1,0 +1,98 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+.wrapper {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    padding: 20px;
+    padding-top: 0px;
+}
+
+
+body {
+    font-family: sans-serif;
+    background-color: #f9fbfd;
+}
+
+.high-scores {
+    color: blue;
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* .high-scores:hover {
+    background-color: blue;
+    color: white;
+} */
+
+.high-scores:active {
+    color: white;
+    background-color: blue;
+}
+
+.container {
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.card {
+    display: flexbox;
+    margin: 0 auto;
+    max-width: 50%;
+    height: 100%;
+    border: 2px solid black;
+    border-radius: 25px;
+}
+
+.card-header {
+    text-align: center;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.card-body p {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.card-footer {
+    text-align: center;
+}
+
+.btn {
+    background-color: blue;
+    font-size: 1rem;
+    color: white;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 6px 0px rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 690px) {
+    .btn {
+      font-size: 0.9rem;
+    }
+  
+  @media (max-width: 500px) {
+    .btn {
+      font-size: 0.8rem;
+    }
+  }
+  
