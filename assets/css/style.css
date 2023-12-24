@@ -75,7 +75,7 @@ body {
     text-align: center;
 }
 
-.btn {
+.card-footer button{
     background-color: blue;
     font-size: 1rem;
     color: white;
@@ -95,4 +95,4 @@ body {
       font-size: 0.8rem;
     }
   }
-  
+}
