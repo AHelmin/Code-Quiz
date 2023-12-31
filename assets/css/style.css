@@ -74,16 +74,22 @@ body {
 
 .card-footer {
     text-align: center;
+    /* align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex; */
+    /* width: 40%; */
 }
 
 .card-footer button{
+    display: block;
     background-color: blue;
     font-size: 1rem;
     color: white;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 6px 0px rgba(0, 0, 0, 0.2) 0px 1px 1px 0px;
     padding: 5px;
-    margin-bottom: 20px;
+    margin: 10px auto;
 }
 
 #msg {

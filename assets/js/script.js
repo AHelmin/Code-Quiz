@@ -1,9 +1,10 @@
 //TODO
-//add a listener for highscores header box  and add logic to build page from that
+//figure out why the clearInterval doesn't work and why it doesn't immediately go to the score page
+//figure out why score is not updated with correct answer
+//figure out why the right or wrong text isn't displaying
 //build highScore page with JSON parse
-//stop the display of the #msg at scorePage and highScorePage
-//switch heading keys in object to inclue the html h2 tag and remove it from .card-header in html
-//can add the header section with two divs to remove the empty tags and write them with JS
+//figure out why input field isn't taking text
+
 
 var timeEl = document.querySelector(".timer");
 var score = 0;
@@ -12,10 +13,6 @@ var highScores = document.querySelector('.high-scores');
 var cardHeader = document.querySelector('.card-header');
 var cardBody = document.querySelector('.card-body');
 var cardFooter = document.querySelector('.card-footer');
-// var button1 = document.querySelector('.card-footer .'btn1'');
-// var button2 = document.querySelector('.card-footer .'btn2'');
-// var button3 = document.querySelector('.card-footer .'btn3'');
-// var button4 = document.querySelector('.card-footer .btn4');
 var message = document.querySelector('#msg');
 var inputField = document.querySelector('.input');
 var secondsLeft = 75;
@@ -130,8 +127,8 @@ var pageData = [
         heading: '<h2>All Done</h2>',
         body: 'Your score is ' + score + '.',
         footer: [
-            { text: '<label>Initials:<input type="text" id="name></label>', id: 'input1' },
-            { text: '<button type="button">Submit</button>' },
+            { text: '<label>Initials: <input type="text" id="name" autocomplete="off"></label>', id: 'input1' },
+            { text: '<button type="button" class="button">Submit</button>', id: 'submitBtn' },
         ]
     },
     {
@@ -144,42 +141,33 @@ var pageData = [
     },
 ];
 
-
-
 function writePage() {
+    if (page === 1) {
+        setTime();
+    }
+    if (page === 11) {
+        timeEl.style.display = 'none';
+    }
     cardHeader.innerHTML = pageData[page].heading;
     cardBody.innerHTML = pageData[page].body;
     // inputField.style.display = 'none'
     cardFooter.innerHTML = '';
     if (pageData[page].footer && Array.isArray(pageData[page].footer)) {
-        var textArr = [];
-        pageData[page].footer.forEach(function (text) {
-            if (text.value) {
-                textArr.push(text.value);
-                console.log(textArr);
-                // var buttons = textArr.toString();
-            }
+        var textArr = pageData[page].footer.map(function (text) {
+            return text.text
         })
+
         cardFooter.innerHTML = textArr.join('');
     } else {
         cardFooter.innerHTML = pageData[page].footer
     }
 };
 
-
-// button2.style.display = 'none';
-// button3.style.display = 'none';
-// button4.style.display = 'none';
-
-
 cardFooter.addEventListener("click", function (event) {
-    if (page === 1) {
-        setTime();
-    }
     if (event.target.innerText === 'Start Code Quiz') {
         page++;
-        writePage();
-    } else if (event.target.innerText === 'Submit') {
+        // writePage();
+    } else if (event.target.id === 'submitBtn') {
         //need JSON stringify info
         var userInput = document.getElementById('name').value;
         var userScore = {
@@ -188,22 +176,40 @@ cardFooter.addEventListener("click", function (event) {
         };
         localStorage.setItem('userScore', JSON.stringify(userScore));
         page = 12;
+        // writePage();
     } else if (event.target.innerText === 'Go Back') {
         page = 0;
+        // writePage();
+    } else if (event.target.innerText === 'Clear Highscores') {
+        localStorage.clear();
+        page = 12;
+        // writePage();
     } else {
-        if (event.target.correct) {
-            message.textContent = 'You are correct!';
-            score += 5;
-        } else {
-            message.textContent = 'Wrong answer!';
-            secondsLeft -= 10;
+        var clickedButton = event.target.id;
+        var currentPage = pageData[page];
+
+        for (var i = 0; i < currentPage.footer.length; i++) {
+            if (currentPage.footer[i].id === clickedButton) {
+                if (currentPage.footer[i].correct) {
+                    message.textContent = 'You are correct!';
+                    console.log('Before Score Update:', score);
+                    score += 5;
+                    console.log('After Score Update:', score);
+                } else {
+                    message.textContent = 'Wrong answer!';
+                    secondsLeft -= 10;
+                }
+                break;
+            }
         }
         if (page < pageData.length - 3) {
             page++;
         } else {
             page = 11;
         }
+        
     }
+    writePage();
 })
 
 function setTime() {
@@ -214,7 +220,8 @@ function setTime() {
 
         if (secondsLeft === 0) {
             clearInterval(timerInterval);
-            scorePage();
+            page = 11;
+            writePage();
         }
     }, 1000)
 };
