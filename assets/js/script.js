@@ -15,8 +15,7 @@ var cardBody = document.querySelector('.card-body');
 var cardFooter = document.querySelector('.card-footer');
 var message = document.querySelector('#msg');
 var inputField = document.querySelector('.input');
-//make secondsLeft global to be used in eventListener
-var secondsLeft = 0;
+var secondsLeft;
 
 //card data object
 var pageData = [
