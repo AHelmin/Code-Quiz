@@ -1,8 +1,8 @@
 //TODO
-//figure out why the clearInterval doesn't work and why it doesn't immediately go to the score page
+//figure out why the clearInterval doesn't work and why it doesn't immediately go to the score page---UPDATE: I THINK THIS IS WORKING
 //figure out why score is not updated with correct answer
 //figure out why the right or wrong text isn't displaying
-//build highScore page with JSON parse
+//build highScore page with JSON parse---built under the assumption that we are storing an array of highscores
 //figure out why input field isn't taking text
 
 
@@ -15,8 +15,10 @@ var cardBody = document.querySelector('.card-body');
 var cardFooter = document.querySelector('.card-footer');
 var message = document.querySelector('#msg');
 var inputField = document.querySelector('.input');
-var secondsLeft = 75;
+//make secondsLeft global to be used in eventListener
+var secondsLeft = 0;
 
+//card data object
 var pageData = [
     {
         heading: '<h2>Coding Quiz Challenge</h2>',
@@ -133,7 +135,7 @@ var pageData = [
     },
     {
         heading: '<h2>Highscores</h2>',
-        body: '',
+        body: '<ol></ol>',
         footer: [
             { text: '<button type="button">Go Back</button>', id: 'btn1' },
             { text: '<button type="button">Clear Highscores</button>', id: 'btn2' },
@@ -145,9 +147,9 @@ function writePage() {
     if (page === 1) {
         setTime();
     }
-    if (page === 11) {
-        timeEl.style.display = 'none';
-    }
+    // if (page === 11) {
+    //     timeEl.style.display = 'none';
+    // }
     cardHeader.innerHTML = pageData[page].heading;
     cardBody.innerHTML = pageData[page].body;
     // inputField.style.display = 'none'
@@ -166,9 +168,10 @@ function writePage() {
 cardFooter.addEventListener("click", function (event) {
     if (event.target.innerText === 'Start Code Quiz') {
         page++;
-        // writePage();
-    } else if (event.target.id === 'submitBtn') {
+        writePage();
+    } else if (event.target.innerText === 'Submit') {
         //need JSON stringify info
+        // event.preventDefault();
         var userInput = document.getElementById('name').value;
         var userScore = {
             initials: userInput,
@@ -176,14 +179,14 @@ cardFooter.addEventListener("click", function (event) {
         };
         localStorage.setItem('userScore', JSON.stringify(userScore));
         page = 12;
-        // writePage();
+        writePage();
     } else if (event.target.innerText === 'Go Back') {
         page = 0;
-        // writePage();
+        writePage();
     } else if (event.target.innerText === 'Clear Highscores') {
         localStorage.clear();
         page = 12;
-        // writePage();
+        writePage();
     } else {
         var clickedButton = event.target.id;
         var currentPage = pageData[page];
@@ -199,7 +202,14 @@ cardFooter.addEventListener("click", function (event) {
                     message.textContent = 'Wrong answer!';
                     secondsLeft -= 10;
                 }
-                break;
+                // break;
+                // if (page < pageData.length - 3) {
+                //     page++;
+                // } else {
+                //     page = 11;
+                // }
+                // writePage();
+
             }
         }
         if (page < pageData.length - 3) {
@@ -207,18 +217,25 @@ cardFooter.addEventListener("click", function (event) {
         } else {
             page = 11;
         }
-        
+        writePage();
+
     }
-    writePage();
+    // if (page < pageData.length - 3) {
+    //     page++;
+    // } else {
+    //     page = 11;
+    // }
+    // writePage();
 })
 
-function setTime() {
 
+function setTime() {
+    secondsLeft = 75;
     var timerInterval = setInterval(function () {
         secondsLeft--;
         timeEl.innerHTML = '<h1>Timer: ' + secondsLeft + ' seconds remain</h1>'
 
-        if (secondsLeft === 0) {
+        if (secondsLeft === 0 || page === 11) {
             clearInterval(timerInterval);
             page = 11;
             writePage();
@@ -229,6 +246,17 @@ function setTime() {
 highScores.addEventListener('click', function () {
     page = 12;
     writePage();
+    var highScoreData = JSON.parse(localStorage.getItem('userScore'));
+    var orderedList = document.querySelector('.card-body ol');
+    if (Array.isArray(highScoreData)) {
+        for (var i = 0; i < highScoreData.length; i++) {
+            if (highScoreData[i]) {
+                var listItem = document.createElement('li');
+                listItem.textContent = highScoreData[i].initials + '  ' + highScoreData[i].score;
+                orderedList.appendChild(listItem);
+            }
+        }
+    }
 });
 
 writePage();
