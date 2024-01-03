@@ -1,6 +1,3 @@
-//TODO
-//change the CSS for the all done page so that the buttons are inline and spaced out, flex? 
-
 
 var timeEl = document.querySelector(".timer");
 var score = 0;
@@ -13,9 +10,6 @@ var message = document.querySelector('#msg');
 var inputField = document.querySelector('.input');
 var secondsLeft;
 
-function getRealScore() {
-
-}
 //card data object
 var pageData = [
     {
@@ -141,19 +135,21 @@ var pageData = [
     },
 ];
 
+
+//writes all the pageData to the card in the HTML
 function writePage() {
     if (page === 1) {
         setTime();
     }
-    // if (page === 11) {
-    //     timeEl.style.display = 'none';
-    // }
     cardHeader.innerHTML = pageData[page].heading;
     if (page === pageData.length - 2) {
+        //adds remaining seconds left to final score
+        score += secondsLeft;
         cardBody.innerHTML = `<p>Your score is ${score}.</p>`
     } else {
-    cardBody.innerHTML = pageData[page].body;
+        cardBody.innerHTML = pageData[page].body;
     }
+    //uses map to return an array of the text data in a pageData index, then make it a string to write the HTML
     cardFooter.innerHTML = '';
     if (pageData[page].footer && Array.isArray(pageData[page].footer)) {
         var textArr = pageData[page].footer.map(function (text) {
@@ -163,19 +159,16 @@ function writePage() {
     } else {
         cardFooter.innerHTML = pageData[page].footer
     }
+    //modify the style for the all done page to display these buttons inline
     if (page === pageData.length - 1) {
         cardFooter.style = "display: flex; justify-content: space-around";
-        
     } else {
         cardFooter.style = "text-align: center"
     }
-
-    // crea a dom element like a p tag
-    console.log("Your current score is " + score)
 };
 
+//this listener is the core of this web app, it listens for clicks based on the conditionals
 cardFooter.addEventListener("click", function (event) {
-    // event.preventDefault();
     if (event.target.innerText === 'Start Code Quiz') {
         page++;
         writePage();
@@ -202,49 +195,37 @@ cardFooter.addEventListener("click", function (event) {
         page = 12;
         writePage();
     } else {
-        console.log(event.target)
         var clickedButton = event.target.id;
         var currentPage = pageData[page];
-
         for (var i = 0; i < currentPage.footer.length; i++) {
-            // console.log(clickedButton)
             if (currentPage.footer[i].id === clickedButton) {
-
-                // console.log(currentPage.footer[i].id)
-                // console.log(clickedButton)
-
                 if (currentPage.footer[i].correct) {
                     message.textContent = 'You are correct!';
-                    // console.log('Before Score Update:', score);
                     score += 5;
-                    // console.log('After Score Update:', score);
                 } else {
                     message.textContent = 'Wrong answer!';
                     secondsLeft -= 10;
                 }
-                // break;
                 if (page < pageData.length - 3) {
                     page++;
                 } else {
                     page = 11;
                 }
                 writePage();
-
             }
         }
     }
 })
 
-
+//sets timer on the webpage
 function setTime() {
     secondsLeft = 75;
     var timerInterval = setInterval(function () {
         secondsLeft--;
-        timeEl.innerHTML = '<h1>Timer: ' + secondsLeft + ' seconds remain</h1>'
-
-        if (secondsLeft <= 0 || page === 11) {
+        timeEl.innerHTML = '<h1>Timer: ' + secondsLeft + ' seconds remaining!</h1>'
+        if (secondsLeft <= 0 || page === pageData.length - 2) {
             clearInterval(timerInterval);
-            page = 11;
+            page = pageData.length - 2;
             writePage();
         }
     }, 1000)
@@ -257,18 +238,15 @@ function scorePageBuildHighscores() {
         for (var i = 0; i < userScore.length; i++) {
             if (userScore[i]) {
                 var listItem = document.createElement('li');
-                console.log(listItem);
                 listItem.textContent = userScore[i].initials + '  ' + userScore[i].points;
-                console.log(listItem.textContent);
                 orderedList.appendChild(listItem);
-                console.log(orderedList);
             }
         }
     }
 }
 
 highScores.addEventListener('click', function () {
-    page = 12;
+    page = pageData.length - 1;
     writePage();
     scorePageBuildHighscores();
 });
