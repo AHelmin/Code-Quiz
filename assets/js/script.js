@@ -1,11 +1,5 @@
 //TODO
-//figure out why the clearInterval doesn't work and why it doesn't immediately go to the score page---UPDATE: I THINK THIS IS WORKING
-//figure out why score is not updated with correct answer
-//figure out why the right or wrong text isn't displaying--DONE
-//build highScore page with JSON parse---built under the assumption that we are storing an array of highscores
-//figure out why input field isn't taking text--DONE
-//add css for li items of ol
-//write a function for the callback of highscore listener to be use when submit is also pressed
+//change the CSS for the all done page so that the buttons are inline and spaced out, flex? 
 
 
 var timeEl = document.querySelector(".timer");
@@ -131,7 +125,7 @@ var pageData = [
     },
     {
         heading: '<h2>All Done</h2>',
-        body: 'Your score is ' + score + '.',
+        body: '',
         footer: [
             { text: '<label>Initials: <input type="text" id="name" autocomplete="off"></label>', id: 'input1' },
             { text: '<button type="button" class="button">Submit</button>', id: 'submitBtn' },
@@ -155,17 +149,25 @@ function writePage() {
     //     timeEl.style.display = 'none';
     // }
     cardHeader.innerHTML = pageData[page].heading;
+    if (page === pageData.length - 2) {
+        cardBody.innerHTML = `<p>Your score is ${score}.</p>`
+    } else {
     cardBody.innerHTML = pageData[page].body;
-    // inputField.style.display = 'none'
+    }
     cardFooter.innerHTML = '';
     if (pageData[page].footer && Array.isArray(pageData[page].footer)) {
         var textArr = pageData[page].footer.map(function (text) {
             return text.text
         })
-
         cardFooter.innerHTML = textArr.join('');
     } else {
         cardFooter.innerHTML = pageData[page].footer
+    }
+    if (page === pageData.length - 1) {
+        cardFooter.style = "display: flex; justify-content: space-around";
+        
+    } else {
+        cardFooter.style = "text-align: center"
     }
 
     // crea a dom element like a p tag
