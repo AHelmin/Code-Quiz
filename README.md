@@ -17,16 +17,17 @@ To use this service simply navigate to the website address below.
 https://ahelmin.github.io/Code-Quiz/
 
 To start quiz simply press the 'Start Code Quiz' button. You have 75 seconds to answer all 10 questions.
-![Code Quiz Start Page](./assets/images/Start%20Code%20Quiz.png)
+![Code Quiz Start Page](./assets/images/Start_Code_Quiz.png)
 
 One the quiz has started, select the answers from a choice of four by pressing the correct button. Each right answer awards 5 points, while each wrong answer subtracts 10 seconds from the time. The final score is calculated by adding the score with the remaining time. This is a test of not only knowledge but also mouse dexterity.
-![Quiz Question Page](./assets/images/Code%20Quiz%20Question%20with%20Timer.png)
+![Quiz Question Page](./assets/images/Code_Quiz_Question_with_Timer.png)
 
 You can navigate to the Highscores page at any time by clicking the View Highscores link on the top of the page.
-![View Highscores](./assets/images/View%20Highscores.png)
+
+![View Highscores](./assets/images/View_Highscores.png)
 
 Each time you are done with the quiz you can enter your initials and your score will be stored. When on the Highscore page, you can either choose 'Go Back' to start again, or 'Reset Highscores' to erase all stored scores.
-![Code Quiz Start Page](./assets/images/Highscore%20Page.png)
+![High Score Page](./assets/images/Highscore_Page.png)
 
 
 
