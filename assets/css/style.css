@@ -92,6 +92,16 @@ body {
     margin: 10px auto;
 }
 
+.card-body ol {
+    margin-left: 40%;
+    width: 200px;
+    
+}
+
+.card-body ol li {
+    font-size: 1.2rem;
+}
+
 #msg {
     font-size: 1.5rem;
     margin-left: 15px;

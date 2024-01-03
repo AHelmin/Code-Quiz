@@ -4,6 +4,8 @@
 //figure out why the right or wrong text isn't displaying--DONE
 //build highScore page with JSON parse---built under the assumption that we are storing an array of highscores
 //figure out why input field isn't taking text--DONE
+//add css for li items of ol
+//write a function for the callback of highscore listener to be use when submit is also pressed
 
 
 var timeEl = document.querySelector(".timer");
@@ -17,7 +19,7 @@ var message = document.querySelector('#msg');
 var inputField = document.querySelector('.input');
 var secondsLeft;
 
-function getRealScore(){
+function getRealScore() {
 
 }
 //card data object
@@ -176,18 +178,19 @@ cardFooter.addEventListener("click", function (event) {
         page++;
         writePage();
     } else if (event.target.innerText === 'Submit') {
-        //need JSON stringify info
-        // event.preventDefault();
+        //tells the local storage to be displayed as an arr of objects
         var userScore = JSON.parse(localStorage.getItem('userScore') || '[]');
         var userInput = document.getElementById('name').value;
         var currentUserScore = {
             initials: userInput,
             points: score,
         };
+        //add current score to the array
         userScore.push(currentUserScore);
         localStorage.setItem('userScore', JSON.stringify(userScore));
         page = 12;
         writePage();
+        scorePageBuildHighscores();
     } else if (event.target.innerText === 'Go Back') {
         score = 0;
         page = 0;
@@ -200,7 +203,7 @@ cardFooter.addEventListener("click", function (event) {
         console.log(event.target)
         var clickedButton = event.target.id;
         var currentPage = pageData[page];
-    
+
         for (var i = 0; i < currentPage.footer.length; i++) {
             // console.log(clickedButton)
             if (currentPage.footer[i].id === clickedButton) {
@@ -227,20 +230,7 @@ cardFooter.addEventListener("click", function (event) {
 
             }
         }
-        // if (page < pageData.length - 3) {
-        //     page++;
-        // } else {
-        //     page = 11;
-        // }
-        // writePage();
-
     }
-    // if (page < pageData.length - 3) {
-    //     page++;
-    // } else {
-    //     page = 11;
-    // }
-    // writePage();
 })
 
 
@@ -250,7 +240,7 @@ function setTime() {
         secondsLeft--;
         timeEl.innerHTML = '<h1>Timer: ' + secondsLeft + ' seconds remain</h1>'
 
-        if (secondsLeft === 0 || page === 11) {
+        if (secondsLeft <= 0 || page === 11) {
             clearInterval(timerInterval);
             page = 11;
             writePage();
@@ -258,10 +248,7 @@ function setTime() {
     }, 1000)
 };
 
-//NEED TO MAKE THIS LISTENER'S FUNCTION A DEFINED FUNCTION SINCE I WILL NEED TO CALL IT FOR SUBMIT AS WELL
-highScores.addEventListener('click', function () {
-    page = 12;
-    writePage();
+function scorePageBuildHighscores() {
     var userScore = JSON.parse(localStorage.getItem('userScore') || '[]');
     var orderedList = document.querySelector('.card-body ol');
     if (Array.isArray(userScore)) {
@@ -269,118 +256,21 @@ highScores.addEventListener('click', function () {
             if (userScore[i]) {
                 var listItem = document.createElement('li');
                 console.log(listItem);
-                listItem.textContent = userScore[i].initials + '  ' + userScore[i].score;
+                listItem.textContent = userScore[i].initials + '  ' + userScore[i].points;
                 console.log(listItem.textContent);
                 orderedList.appendChild(listItem);
                 console.log(orderedList);
             }
         }
     }
+}
+
+highScores.addEventListener('click', function () {
+    page = 12;
+    writePage();
+    scorePageBuildHighscores();
 });
 
 writePage();
 
-
-// button2.addEventListener("click", function (event) {
-//     if (event.target.innerText === 'Clear Highscores') {
-//         localStorage.clear();
-//     } else {
-
-//         if (pageData[page].'btn2'.correct) {
-//             message.textContent = 'You are correct!'
-//             score += 5;
-//         } else {
-//             message.textContent = 'Wrong answer!';
-//             secondsLeft -= 10;
-//         }
-//         if (page < pageData.length - 3) {
-//             page++;
-//             displayPage();
-//         } else {
-//             scorePage();
-//         }
-//     }
-// });
-
-// button3.addEventListener("click", function () {
-//     if (pageData[page].'btn3'.correct) {
-//         message.textContent = 'You are correct!'
-//         score += 5;
-//     } else {
-//         message.textContent = 'Wrong answer!';
-//         secondsLeft -= 10;
-//     }
-//     if (page < pageData.length - 3) {
-//         page++;
-//         displayPage();
-//     } else {
-//         scorePage();
-//     }
-// });
-
-// button4.addEventListener("click", function () {
-//     if (pageData[page].btn4.correct) {
-//         message.textContent = 'You are correct!'
-//         score += 5;
-//     } else {
-//         message.textContent = 'Wrong answer!';
-//         secondsLeft -= 10;
-//     }
-//     if (page < pageData.length - 3) {
-//         page++;
-//         displayPage();
-//     } else {
-//         scorePage();
-//     }
-// });
-
-
-
-
-
-// function displayPage() {
-//     cardHeader.innerHTML = pageData[page].heading;
-//     cardBody.innerHTML = pageData[page].body;
-//     inputField.style.display = 'none';
-//     cardFooter.innerHTML = pageData[page].'btn1'.text;
-//     button2.style = 'display: block; margin: auto; margin-bottom: 20px; padding: 5px';
-//     button3.style = 'display: block; margin: auto; margin-bottom: 20px; padding: 5px';
-//     button4.style = 'display: block; margin: auto; margin-bottom: 20px; padding: 5px';
-//     button2.innerHTML = pageData[page].'btn2'.text;
-//     button3.innerHTML = pageData[page].'btn3'.text;
-//     button4.innerHTML = pageData[page].btn4.text;
-//     // if (secondsLeft <= 0) {
-//     //     scorePage();
-//     // }
-// };
-
-// function questionPage() {
-//     setTime();
-//     page = 1;
-//     displayPage();
-// };
-
-// function scorePage() {
-//     timeEl.style.display = 'none';
-//     cardHeader.innerHTML = pageData[11].heading;
-//     cardBody.innerHTML = 'Your score is ' + score + '.';
-//     cardFooter.style = 'display: inline; margin: auto; margin-right: 50px; margin-bottom: 20px; padding: 5px';
-//     inputField.style = 'display: inline; margin: auto; margin-left: 50px; margin-bottom: 20px; padding: 5px';
-//     cardFooter.innerHTML = pageData[11].'btn1'.text;
-//     button2.style.display = 'none'
-//     button3.style.display = 'none'
-//     button4.style.display = 'none'
-
-// };
-
-// function highScorePage() {
-//     var highScoreData = JSON.parse(localStorage.getItem('userScore'));
-//     cardHeader.innerHTML = pageData[12].heading;
-//     cardBody.innerHTML = //need to figure out how to split these
-//         inputField.style.display = 'none';
-//     cardFooter.style = 'display: inline; margin: auto; margin-right: 50px; margin-bottom: 20px; padding: 5px';
-//     cardFooter.innerHTML = pageData[12].'btn1'.text;
-//     button2.style = 'display: inline; margin: auto; margin-left: 50px; margin-bottom: 20px; padding: 5px';
-//     button2.innerHTML = pageData[12].'btn2'.text;
-// }
 
